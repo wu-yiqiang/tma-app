@@ -19,9 +19,10 @@ try {
   init(retrieveLaunchParams().startParam === 'debug' || import.meta.env.DEV);
 
   root.render(
-    <StrictMode>
-      <Root/>
-    </StrictMode>,
+    // <StrictMode>
+    //   <Root/>
+    // </StrictMode>,
+    <Root/>
   );
 } catch (e) {
   root.render(<EnvUnsupported/>);

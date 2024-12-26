@@ -1,43 +1,46 @@
-import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
-import type { FC } from 'react';
-
-import { Link } from '@/components/Link/Link.tsx';
-import { Page } from '@/components/Page.tsx';
-
-import tonSvg from './ton.svg';
+import type { FC } from 'react'
+import { Page } from '@/components/Page.tsx'
+import LoadingScene  from '@/scenes/Loading.tsx'
+import { useSceneStore } from '@/store/scene.store'
+import { useShallow } from 'zustand/shallow'
 
 export const IndexPage: FC = () => {
-  return (
-    <Page back={false}>
-      <List>
-        <Section
-          header="Features"
-          footer="You can use these pages to learn more about features, provided by Telegram Mini Apps and other useful projects"
-        >
-          <Link to="/ton-connect">
-            <Cell
-              before={<Image src={tonSvg} style={{ backgroundColor: '#007AFF' }}/>}
-              subtitle="Connect your TON wallet"
-            >
-              TON Connect
-            </Cell>
-          </Link>
-        </Section>
-        <Section
-          header="Application Launch Data"
-          footer="These pages help developer to learn more about current launch information"
-        >
-          <Link to="/init-data">
-            <Cell subtitle="User data, chat information, technical data">Init Data</Cell>
-          </Link>
-          <Link to="/launch-params">
-            <Cell subtitle="Platform identifier, Mini Apps version, etc.">Launch Parameters</Cell>
-          </Link>
-          <Link to="/theme-params">
-            <Cell subtitle="Telegram application palette information">Theme Parameters</Cell>
-          </Link>
-        </Section>
-      </List>
-    </Page>
-  );
-};
+  // 使用 zustand 的 useSceneStore 来获取和更新当前场景状态
+  const { setCurrentScene, currentScene } = useSceneStore(
+    useShallow((state) => ({
+      setCurrentScene: state.setCurrentScene,
+      currentScene: state.currentScene
+    }))
+  )
+  // 根据当前场景状态来渲染相应的场景组件
+  const renderScene = () => {
+    switch (currentScene) {
+      case 'loading':
+        return <LoadingScene />
+      // 后续可按照相同模式依次添加其他场景的渲染逻辑
+      // case "registration":
+      //     return <RegistrationScene />;
+      // case "dailyReward":
+      //     return <DailyRewardScene />;
+      // case "achievements":
+      //     return <AchievementsScene />;
+      // case "tournament":
+      //     return <TournamentScene />;
+      // case "casino":
+      //     return <CasinoScene />;
+      // case "task":
+      //     return <TaskScene />;
+      // case "stats":
+      //     return <StatsScene />;
+      // case "settings":
+      //     return <SettingsScene />;
+      // case "betting":
+      //     return <BettingScene />;
+      // case "game":
+      //     return <GameScene />;
+      default:
+        return <div>未知场景</div>
+    }
+  }
+  return <Page back={false}>{renderScene()}</Page>
+}
