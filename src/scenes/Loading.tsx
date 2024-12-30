@@ -18,7 +18,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadingComplete }) => {
           if (isFirstTime) {
             localStorage.setItem('hasPlayedBefore', 'true')
           }
-          onLoadingComplete(isFirstTime)
+          onLoadingComplete?.(isFirstTime)
           return 100
         }
         return prevProgress + 100 / 30
